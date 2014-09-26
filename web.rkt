@@ -69,5 +69,6 @@
 (define (new-game req)
   (play-game (game-state (make-minefield 10 10 .2))))
 
-(serve/servlet new-game)
+(module+ main
+  (serve/servlet new-game))
   
