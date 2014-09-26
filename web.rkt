@@ -15,7 +15,7 @@
   (cond [(cell-hidden? a-cell)
          `(a ([href ,(embed/url
                       (λ (req)
-                        (grid-update a-grid x y cell-reveal)))])
+                        (cell-reveal-propogate a-grid x y)))])
              "X")]
         [(and (not (cell-hidden? a-cell))
               (cell-mine? a-cell))
@@ -57,7 +57,7 @@
                                   `(td ,(cond [(cell-hidden? (grid-ref a-grid x y))
                                              `(a ([href ,(embed/url
                                                           (λ (req)
-                                                            (grid-update a-grid x y cell-reveal)))])
+                                                            (cell-reveal-propogate a-grid x y)))])
                                                  "X")]
                                             [(and (not (cell-hidden? (grid-ref a-grid x y)))
                                                   (cell-mine? (grid-ref a-grid x y)))

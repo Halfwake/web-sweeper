@@ -10,7 +10,7 @@
 (provide cell-mine?
          cell-marked?
          cell-hidden?
-         cell-reveal
+         cell-reveal-propogate
          count-adjacent-mines
          make-minefield
          game-over?)
