@@ -10,23 +10,6 @@
 
 (struct game-state (grid))
 
-; DON'T NEED
-
-
-(define (render-cells a-grid embed/url)
-  (grid-map (λ (iter-value iter-x iter-y)
-              `(td (render-cell a-grid iter-x iter-y embed/url)))))
-
-(define (render-row a-row)
-  `(tr ,@a-row))
-
-(define (chunkify lst n)
-  (if (null? lst)
-      '()
-      (cons (take n lst) (chunkify (drop n lst) n))))
-
-;; DON'T NEED
-
 (define (reveal-link a-grid x y)
   (λ (req)
     (cell-reveal-propogate a-grid x y)))
@@ -37,6 +20,7 @@
         [(cell-mine? a-cell) "*"]
         [else (format "~a" (count-adjacent-mines a-grid x y))]))
 
+
 (define (render-grid a-grid embed/url)
   (for/list ([y (grid-height a-grid)])
     `(tr ,@(for/list ([x (grid-width a-grid)])
@@ -44,6 +28,8 @@
                           `(a ([href ,(embed/url  (reveal-link a-grid x y))])
                               ,(render-cell a-grid x y))]
                          [else (render-cell a-grid x y)]))))))
+  
+  
 ;; TODO Refactor
 (define (play-game a-game-state)
   (match-define (game-state a-grid) a-game-state)
