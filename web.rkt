@@ -30,7 +30,7 @@
                           5 "/5.png"
                           6 "/6.png"
                           7 "/7.png"
-                          8 "./images/8.png"))
+                          8 "/8.png"))
 
 (define (render-cell-image a-grid x y)
   (define a-cell (grid-ref a-grid x y))
