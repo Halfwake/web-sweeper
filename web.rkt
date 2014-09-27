@@ -20,16 +20,16 @@
         [(cell-mine? a-cell) "*"]
         [else (format "~a" (count-adjacent-mines a-grid x y))]))
 
-(define cell-images (hash 'hidden "./images/hidden.png"
-                          'mine "./images/mine.png"
-                          0 "./images/clear.png"
-                          1 "./images/1.png"
-                          2 "./images/2.png"
-                          3 "./images/3.png"
-                          4 "./images/4.png"
-                          5 "./images/5.png"
-                          6 "./images/6.png"
-                          7 "./images/7.png"
+(define cell-images (hash 'hidden "/hidden.png"
+                          'mine "/mine.png"
+                          0 "/clear.png"
+                          1 "/1.png"
+                          2 "/2.png"
+                          3 "/3.png"
+                          4 "/4.png"
+                          5 "/5.png"
+                          6 "/6.png"
+                          7 "/7.png"
                           8 "./images/8.png"))
 
 (define (render-cell-image a-grid x y)
@@ -64,8 +64,8 @@
     render-mode)))
                       
 (define (new-game req)
-  (play-game (game-state (make-minefield 10 10 .05) 'text)))
+  (play-game (game-state (make-minefield 10 10 .05) 'image)))
 
 (module+ main
-  (serve/servlet new-game))
+  (serve/servlet new-game #:extra-files-paths (list "./images/")))
   
