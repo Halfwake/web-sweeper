@@ -10,19 +10,7 @@
 
 (struct game-state (grid))
 
-(define (render-cell a-grid x y embed/url)
-  (define a-cell (grid-ref a-grid x y))
-  (cond [(cell-hidden? a-cell)
-         `(a ([href ,(embed/url
-                      (λ (req)
-                        (cell-reveal-propogate a-grid x y)))])
-             "X")]
-        [(and (not (cell-hidden? a-cell))
-              (cell-mine? a-cell))
-         "*"]
-        [(and (not (cell-hidden? a-cell))
-              (not (cell-mine? a-cell)))
-         (format "~a" (count-adjacent-mines a-grid x y))]))
+; DON'T NEED
 
 
 (define (render-cells a-grid embed/url)
@@ -37,10 +25,25 @@
       '()
       (cons (take n lst) (chunkify (drop n lst) n))))
 
+;; DON'T NEED
+
+(define (reveal-link a-grid x y)
+  (λ (req)
+    (cell-reveal-propogate a-grid x y)))
+
+(define (render-cell a-grid x y)
+  (define a-cell (grid-ref a-grid x y))
+  (cond [(cell-hidden? a-cell) "X"]
+        [(cell-mine? a-cell) "*"]
+        [else (format "~a" (count-adjacent-mines a-grid x y))]))
+
 (define (render-grid a-grid embed/url)
-  `(table ,@(map render-row (chunkify (render-cells a-grid embed/url) (grid-width a-grid)))))
-
-
+  (for/list ([y (grid-height a-grid)])
+    `(tr ,@(for/list ([x (grid-width a-grid)])
+             `(td ,(cond [(cell-hidden? (grid-ref a-grid x y))
+                          `(a ([href ,(embed/url  (reveal-link a-grid x y))])
+                              ,(render-cell a-grid x y))]
+                         [else (render-cell a-grid x y)]))))))
 ;; TODO Refactor
 (define (play-game a-game-state)
   (match-define (game-state a-grid) a-game-state)
@@ -51,20 +54,8 @@
        (response/xexpr
         `(html (head (title "MineSweeper"))
                (body (h1 "MineSweeper")
-                     (table
-                      ,@(for/list ([y (grid-height a-grid)])
-                          `(tr ,@(for/list ([x (grid-width a-grid)])
-                                  `(td ,(cond [(cell-hidden? (grid-ref a-grid x y))
-                                             `(a ([href ,(embed/url
-                                                          (λ (req)
-                                                            (cell-reveal-propogate a-grid x y)))])
-                                                 "X")]
-                                            [(and (not (cell-hidden? (grid-ref a-grid x y)))
-                                                  (cell-mine? (grid-ref a-grid x y)))
-                                             "*"]
-                                            [(and (not (cell-hidden? (grid-ref a-grid x y)))
-                                                  (not (cell-mine? (grid-ref a-grid x y))))
-                                             (format "~a" (count-adjacent-mines a-grid x y))]))))))))))))))
+                     (table ,@(render-grid a-grid embed/url))))))))))
+                      
 
 (define (new-game req)
   (play-game (game-state (make-minefield 10 10 .2))))
