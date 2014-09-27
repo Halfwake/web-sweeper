@@ -20,7 +20,6 @@
         [(cell-mine? a-cell) "*"]
         [else (format "~a" (count-adjacent-mines a-grid x y))]))
 
-
 (define (render-grid a-grid embed/url)
   (for/list ([y (grid-height a-grid)])
     `(tr ,@(for/list ([x (grid-width a-grid)])
@@ -29,8 +28,6 @@
                               ,(render-cell a-grid x y))]
                          [else (render-cell a-grid x y)]))))))
   
-  
-;; TODO Refactor
 (define (play-game a-game-state)
   (match-define (game-state a-grid) a-game-state)
   (play-game
@@ -42,7 +39,6 @@
                (body (h1 "MineSweeper")
                      (table ,@(render-grid a-grid embed/url))))))))))
                       
-
 (define (new-game req)
   (play-game (game-state (make-minefield 10 10 .05))))
 
