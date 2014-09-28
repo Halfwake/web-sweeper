@@ -5,10 +5,11 @@
          web-server/servlet
          web-server/servlet-env
          web-server/page
+         racket/serialize
          "grid.rkt"
          "mine.rkt")
 
-(struct game-state (grid render-mode))
+(serializable-struct game-state (grid render-mode))
 
 (define (reveal-link a-grid x y)
   (λ (req)
@@ -67,5 +68,5 @@
   (play-game (game-state (make-minefield 10 10 .05) 'image)))
 
 (module+ main
-  (serve/servlet new-game #:extra-files-paths (list "./images/")))
+  (serve/servlet new-game #:extra-files-paths (list "./images/") #:stateless? #t))
   

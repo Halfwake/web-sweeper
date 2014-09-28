@@ -5,6 +5,7 @@
 (require racket/match
          racket/list
          racket/function
+         racket/serialize
          "grid.rkt")
 
 (provide cell-mine?
@@ -15,7 +16,7 @@
          make-minefield
          game-over?)
 
-(struct cell (type marked? hidden?) #:transparent)
+(serializable-struct cell (type marked? hidden?) #:transparent)
 
 (define (make-cell type)
   (cell type #f #t))

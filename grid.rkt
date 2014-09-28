@@ -4,9 +4,8 @@
 ;;;; Remember: a nested list/vector/collection/array is not a 2D grid!
 ;;;; TODO: Rewrite to use vectors instead of lists. Might need a third party library.
 
-(require racket/match
-         racket/list
-         racket/function)
+(require racket/function
+         racket/serialize)
 
 (provide make-grid
          grid-rows
@@ -21,7 +20,7 @@
          grid-update
          grid-set)
 
-(struct grid (rows) #:transparent)
+(serializable-struct grid (rows) #:transparent)
 
 (define (make-grid rows)
   (cond [(not (apply = (map length rows)))
