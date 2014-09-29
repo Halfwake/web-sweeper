@@ -1,10 +1,10 @@
-#lang racket/base
+#lang web-server/base
 
 (require racket/list
          racket/match
-         web-server/servlet
+         web-server/lang/web
+         web-server/http/xexpr
          web-server/servlet-env
-         web-server/page
          racket/serialize
          "grid.rkt"
          "mine.rkt")
