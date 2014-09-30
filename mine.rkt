@@ -14,6 +14,7 @@
          cell-reveal-propogate
          count-adjacent-mines
          make-minefield
+         won-game?
          lost-game?)
 
 (serializable-struct cell (type marked? hidden?) #:transparent)
