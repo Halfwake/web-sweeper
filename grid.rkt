@@ -14,7 +14,7 @@
          grid-column
          grid-width
          grid-height
-         grid-fold
+;todo
          grid-map
          grid-ref
          grid-update
@@ -80,20 +80,7 @@
     (check-equal? (grid-width a-grid) 3)
     (check-equal? (grid-height a-grid) 4)))
 
-(define (grid-fold func init a-grid)
-  (for/fold ([accum init])
-            ([iter-y (grid-height a-grid)]
-             [iter-x (grid-width a-grid)])
-    (define current-value (grid-ref a-grid iter-x iter-y))
-    (func accum current-value iter-x iter-y)))
-
-(module+ test
-  (let ([a-grid (make-grid '((0 0 0) (0 0 0) (0 0 0) (0 0 0)))])
-    (check-equal? (grid-fold (λ (accum _1 _2 _3)
-                               (add1 accum))
-                             0
-                             a-grid)
-                  3)))
+;;todo
 
 (define (grid-map func a-grid)
   (make-grid
