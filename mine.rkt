@@ -14,7 +14,7 @@
          cell-reveal-propogate
          count-adjacent-mines
          make-minefield
-         game-over?)
+         lost-game?)
 
 (serializable-struct cell (type marked? hidden?) #:transparent)
 
@@ -127,17 +127,20 @@
     (check-equal? (count-adjacent-mines a-grid 0 0) 2)
     (check-equal? (count-adjacent-mines a-grid 2 2) 1)))
 
-(define (game-over? a-grid)
-  (grid-fold (λ (accum iter-value iter-x iter-y)
-               (or accum (and (cell-mine? iter-value)
-                              (not (cell-hidden? iter-value)))))
-             #f
-             a-grid))
-             
+(define (lost-game? a-grid)
+  (for/fold ([accum #f])
+            ([a-cell (grid-cells a-grid)])
+    (or accum (and (cell-mine? a-cell)
+                   (not (cell-hidden? a-cell))))))
 
-(module+ test
-  (let ([a-grid (make-grid (list (list (make-cell 'mine))
-                                 (list (make-cell 'mine))))])
-    (check-false (game-over? a-grid))
-    (check-true (game-over? (grid-update a-grid 0 0 cell-reveal)))))
-              
+(define (won-game? a-grid)
+  (for/fold ([accum #t])
+            ([a-cell (grid-cells a-grid)])
+    (and accum (or (and (cell-mine? a-cell) (cell-hidden? a-cell))
+                   (and (not (cell-mine? a-cell)) (not (cell-hidden? a-cell)))))))
+
+(module+ test 
+  (let ([a-grid (make-grid (list (list (cell-reveal (make-cell 'mine)) (make-cell 'mine))
+                                 (list (cell-reveal (make-cell 'mine)) (make-cell 'mine))))])
+    (check-true (lost-game? a-grid))
+    (check-false (won-game? a-grid))))
