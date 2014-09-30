@@ -5,6 +5,7 @@
 ;;;; TODO: Rewrite to use vectors instead of lists. Might need a third party library.
 
 (require racket/function
+         racket/set
          racket/serialize)
 
 (provide make-grid
@@ -14,7 +15,7 @@
          grid-column
          grid-width
          grid-height
-;todo
+         grid-cells
          grid-map
          grid-ref
          grid-update
@@ -80,7 +81,16 @@
     (check-equal? (grid-width a-grid) 3)
     (check-equal? (grid-height a-grid) 4)))
 
-;;todo
+(define (grid-cells a-grid)
+  (for*/fold ([accum '()])
+    ([iter-y (grid-height a-grid)]
+     [iter-x (grid-width a-grid)])
+    (cons (grid-ref a-grid iter-x iter-y) accum)))
+
+(module+ test
+  (let ([a-grid (make-grid (list (list 1 2)
+                                 (list 3 4)))])
+    (check-equal? (apply set (grid-cells a-grid)) (set 1 2 3 4))))
 
 (define (grid-map func a-grid)
   (make-grid
