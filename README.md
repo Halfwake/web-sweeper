@@ -6,4 +6,4 @@ Some cool things that means.
 * Backspace and forward work.
 * Backspace and forward always work.
 
-src(http://i.imgur.com/2IqvBsX.png)
+<img src="http://i.imgur.com/2IqvBsX.png"/>
